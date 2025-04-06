@@ -126,6 +126,11 @@
     });
 
     updateCartDisplay(); // On page load
+document.getElementById('clearCartBtn').addEventListener('click', () => {
+    cartItems = [];
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+    updateCartDisplay();
+});
 </script>
 
 </body>
