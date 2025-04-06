@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart - Cosmos Ink Books</title>
+    <style>
+        body { font-family: Arial; background-color: #f4f4f4; padding: 20px; }
+        h1 { text-align: center; }
+        ul { list-style: none; padding: 0; }
+        li { background: white; margin: 10px 0; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; }
+        button { background-color: #dc3545; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #c82333; }
+        .total { font-weight: bold; text-align: right; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <ul id="cart-items"></ul>
+    <div class="total" id="total-price"></div>
+
+    <script>
+        let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartList = document.getElementById('cart-items');
+        const totalPriceElement = document.getElementById('total-price');
+
+        function updateCartPage() {
+            cartList.innerHTML = '';
+            let total = 0;
+
+            if (cartItems.length === 0) {
+                cartList.innerHTML = '<li>Your cart is empty.</li>';
+                totalPriceElement.textContent = '';
+                return;
+            }
+
+            cartItems.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${item.title} - ${item.price}
+                    <button onclick="removeItem(${index})">Remove</button>
+                `;
+                cartList.appendChild(li);
+
+                total += parseFloat(item.price.replace('$', ''));
+            });
+
+            totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        function removeItem(index) {
+            cartItems.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            updateCartPage();
+        }
+
+        updateCartPage();
+    </script>
+</body>
+</html>
