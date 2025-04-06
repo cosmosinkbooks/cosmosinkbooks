@@ -76,46 +76,55 @@
     </footer> 
 
     <script>
-        const cartItems = [];
-        const cartList = document.getElementById('cart-items');
+    // Load cart from localStorage or initialize as empty array
+    let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartList = document.getElementById('cart-items');
 
-        function updateCartDisplay() {
-            // Clear existing items
-            cartList.innerHTML = '';
+    function updateCartDisplay() {
+        cartList.innerHTML = '';
 
-            if (cartItems.length === 0) {
-                cartList.innerHTML = '<li>No items in cart.</li>';
-                return;
-            }
-
-            cartItems.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = `${item.title} - ${item.price}`;
-                cartList.appendChild(li);
-            });
+        if (cartItems.length === 0) {
+            cartList.innerHTML = '<li>No items in cart.</li>';
+            return;
         }
 
-        document.querySelectorAll('.book').forEach(book => {
-            const button = book.querySelector('button');
-            button.addEventListener('click', () => {
-                const title = book.querySelector('h3').textContent;
-                const price = book.querySelector('.price').textContent;
-
-                cartItems.push({ title, price });
-                updateCartDisplay();
-            });
+        cartItems.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `${item.title} - ${item.price} <button onclick="removeItem(${index})">Remove</button>`;
+            cartList.appendChild(li);
         });
 
-        document.getElementById('checkoutBtn').addEventListener('click', () => {
-            if (cartItems.length === 0) {
-                alert('Your cart is empty!');
-            } else {
-                alert('Proceeding to checkout...');
-                // You can redirect or process the checkout here.
-            }
-        });
+        // Save updated cart to localStorage
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+    }
 
-        updateCartDisplay(); // Initial load
-    </script>
+    function removeItem(index) {
+        cartItems.splice(index, 1);
+        updateCartDisplay();
+    }
+
+    document.querySelectorAll('.book').forEach(book => {
+        const button = book.querySelector('button');
+        button.addEventListener('click', () => {
+            const title = book.querySelector('h3').textContent;
+            const price = book.querySelector('.price').textContent;
+
+            cartItems.push({ title, price });
+            updateCartDisplay();
+        });
+    });
+
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+        if (cartItems.length === 0) {
+            alert('Your cart is empty!');
+        } else {
+            alert('Proceeding to checkout...');
+            // Redirect or add logic here
+        }
+    });
+
+    updateCartDisplay(); // On page load
+</script>
+
 </body>
 </html>
