@@ -27,7 +27,8 @@
 <body>
     <header>Cosmos Ink Books</header>
     
-    <nav>
+    <nav> <a href="cart.html">Cart (<span id="navCartCount">0</span>)</a>
+
         <a href="index.html">Home</a>
         <a href="about.html">About Us</a>
         <a href="cart.html">Cart</a>
@@ -120,7 +121,9 @@
         if (cartItems.length === 0) {
             alert('Your cart is empty!');
         } else {
-            alert('Proceeding to checkout...');
+            localStorage.removeItem('cart');
+window.location.href = 'thankyou.html';
+
             // Redirect or add logic here
         }
     });
@@ -131,6 +134,10 @@ document.getElementById('clearCartBtn').addEventListener('click', () => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
     updateCartDisplay();
 });
+  function updateCartCountInNav() {
+    const navCart = document.getElementById('navCartCount');
+    if (navCart) navCart.textContent = cartItems.length;
+}
 </script>
 
 </body>
