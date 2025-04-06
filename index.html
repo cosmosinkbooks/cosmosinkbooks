@@ -17,6 +17,8 @@
         .book button { background: #222; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px; width: 100%; border-radius: 5px; }
         .book button:hover { background: #555; }
         .cart { padding: 20px; text-align: center; background: white; margin: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        .cart ul { list-style-type: none; padding: 0; margin: 10px 0; }
+        .cart li { margin: 5px 0; }
         .cart button { background: #28a745; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px; border-radius: 5px; }
         .cart button:hover { background: #218838; }
         footer { background-color: #222; color: white; padding: 20px; text-align: center; margin-top: 20px; }
@@ -42,45 +44,78 @@
             <img src="https://via.placeholder.com/200x300" alt="Book 1">
             <h3>Book Title 1</h3>
             <p>Author: Sci-Fi Author</p>
-            <p>Price: $9.99</p>
+            <p class="price">$9.99</p>
             <button>Add to Cart</button>
         </div>
         <div class="book">
             <img src="https://via.placeholder.com/200x300" alt="Book 2">
             <h3>Book Title 2</h3>
             <p>Author: Sci-Fi Author</p>
-            <p>Price: $12.99</p>
+            <p class="price">$12.99</p>
             <button>Add to Cart</button>
         </div>
         <div class="book">
             <img src="https://via.placeholder.com/200x300" alt="Book 3">
             <h3>Book Title 3</h3>
             <p>Author: Sci-Fi Author</p>
-            <p>Price: $14.99</p>
+            <p class="price">$14.99</p>
             <button>Add to Cart</button>
         </div>
     </section>
     
     <section class="cart">
         <h2>Your Cart</h2>
-        <p>No items in cart.</p>
-        <button>Proceed to Checkout</button>
+        <ul id="cart-items">
+            <li>No items in cart.</li>
+        </ul>
+        <button id="checkoutBtn">Proceed to Checkout</button>
     </section>
     
     <footer>
         <p>Contact us: info@cosmosinkbooks.com | Follow us on social media</p>
     </footer> 
-<script>
-    let cartCount = 0;
-    const cartSection = document.querySelector('.cart p');
 
-    document.querySelectorAll('.book button').forEach(button => {
-        button.addEventListener('click', () => {
-            cartCount++;
-            cartSection.textContent = `${cartCount} item(s) in cart.`;
+    <script>
+        const cartItems = [];
+        const cartList = document.getElementById('cart-items');
+
+        function updateCartDisplay() {
+            // Clear existing items
+            cartList.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                cartList.innerHTML = '<li>No items in cart.</li>';
+                return;
+            }
+
+            cartItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.title} - ${item.price}`;
+                cartList.appendChild(li);
+            });
+        }
+
+        document.querySelectorAll('.book').forEach(book => {
+            const button = book.querySelector('button');
+            button.addEventListener('click', () => {
+                const title = book.querySelector('h3').textContent;
+                const price = book.querySelector('.price').textContent;
+
+                cartItems.push({ title, price });
+                updateCartDisplay();
+            });
         });
-    });
-</script>
 
+        document.getElementById('checkoutBtn').addEventListener('click', () => {
+            if (cartItems.length === 0) {
+                alert('Your cart is empty!');
+            } else {
+                alert('Proceeding to checkout...');
+                // You can redirect or process the checkout here.
+            }
+        });
+
+        updateCartDisplay(); // Initial load
+    </script>
 </body>
 </html>
