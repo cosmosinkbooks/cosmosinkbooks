@@ -13,7 +13,8 @@
         .total { font-weight: bold; text-align: right; margin-top: 20px; }
     </style>
 </head>
-<body>
+<body> <nav> <a href="cart.html">Cart (<span id="navCartCount">0</span>)</a>
+</nav> 
    <h1>Your Cart</h1>
 <ul id="cart-items"></ul>
 <div class="total" id="total-price"></div>
@@ -60,6 +61,10 @@
     localStorage.setItem('cart', JSON.stringify(cartItems));
     updateCartPage();
 });
+function updateCartCountInNav() {
+    const navCart = document.getElementById('navCartCount');
+    if (navCart) navCart.textContent = cartItems.length;
+}
  </script>
 </body>
 </html>
