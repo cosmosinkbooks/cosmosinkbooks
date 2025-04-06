@@ -14,9 +14,10 @@
     </style>
 </head>
 <body>
-    <h1>Your Cart</h1>
-    <ul id="cart-items"></ul>
-    <div class="total" id="total-price"></div>
+   <h1>Your Cart</h1>
+<ul id="cart-items"></ul>
+<div class="total" id="total-price"></div>
+<button id="clearCartBtn" style="margin-top: 10px;">Clear Cart</button>
 
     <script>
         let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
@@ -54,6 +55,11 @@
         }
 
         updateCartPage();
-    </script>
+   document.getElementById('clearCartBtn').addEventListener('click', () => {
+    cartItems = [];
+    localStorage.setItem('cart', JSON.stringify(cartItems));
+    updateCartPage();
+});
+ </script>
 </body>
 </html>
